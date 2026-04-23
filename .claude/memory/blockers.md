@@ -8,7 +8,7 @@ columns: [id, date, friction, cause, solution, statut]
 
 | ID | Date | Friction | Statut |
 |----|------|----------|--------|
-| BLK-001 | 2026-04-23 | Projet neuf — pas de code existant, pas de git, pas de DB | En cours |
+| BLK-001 | 2026-04-23 | Projet neuf — pas de code existant, pas de git, pas de DB | Résolu |
 
 ---
 
@@ -25,4 +25,4 @@ columns: [id, date, friction, cause, solution, statut]
 - Init git + remote RegisAmon/leadaly
 - Installer shadcn/ui
 
-**Statut :** En cours — traité par SESSION 1.1
+**Statut :** Résolu — SESSION 1.1 terminée
