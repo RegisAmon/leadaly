@@ -10,6 +10,7 @@ columns: [date, durée, thèmes, statut_session]
 |------|-------|--------|--------|
 | 2026-04-23 | ~60min | Setup mémoire agent, lecture docs, SESSION 1.1 bootstrap + github repo, SESSION 1.2 Clerk auth + workspace auto-creation | ✅ |
 | 2026-04-23 | ~15min | SESSION 1.3 : Turso (libSQL) вместо Supabase — schema.sql complet (workspaces, leads, campaigns, jobs, credit_transactions, crm_connections), init_db.py, Database wrapper autour libsql-client async, FastAPI startup: init_db() + close(), workspace router mis à jour. | ✅ |
+| 2026-04-24 | ~30min | SESSION 2.1 : Prospects UI (ProspectCard, ProspectGrid, FilterBar, ProspectDetail Sheet), mock data, filtres + tabs. Fix: LinkedinIcon absent → LinkIcon, base-ui Select onValueChange signature, Prospect.phone manquant. Frontend ✅, Backend ✅ (venv).
 
 ---
 
