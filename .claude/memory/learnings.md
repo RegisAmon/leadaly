@@ -11,6 +11,9 @@ columns: [id, date, pattern, contexte, application]
 | LRN-001 | 2026-04-23 | Système mémoire agent multi-projets | Infrastructure agent |
 | LRN-002 | 2026-04-23 | FastAPI async everywhere | Backend Leadaly |
 | LRN-003 | 2026-04-23 | Credit system double-check | Billing Leadaly |
+| LRN-004 | 2026-04-23 | shadcn/base-ui — pas de `asChild`, utiliser `render` prop | Frontend Leadaly |
+| LRN-005 | 2026-04-23 | Tailwind v4 = config CSS only, `@theme inline` dans globals.css | Frontend Leadaly |
+| LRN-006 | 2026-04-23 | libsql Row.asdict() pas Row.columns | Backend Turso |
 
 ---
 
@@ -41,3 +44,33 @@ columns: [id, date, pattern, contexte, application]
 **Contexte :** Dans Leadaly, les crédits sont vérifiés ET réservés avant chaque opération de scraping. Le check se fait en DB (source of truth) ET en Redis (cache rapide pour éviter les race conditions). Si un job échoue après réservation, les crédits sont remboursés.
 
 **Application future :** Toujours implémenter le pattern check → reserve → execute → confirm OR rollback. Jamais décrémenter les crédits avant d'avoir confirmé que l'opération est réussie.
+
+---
+
+## LRN-004 — 2026-04-23
+
+**Pattern :** shadcn/base-ui — pas de `asChild`
+
+**Contexte :** Ce projet utilise shadcn avec `base-ui` (pas Radix). DropdownMenuTrigger n'accepte pas `asChild`. Il faut passer les classes directement sur le trigger.
+
+**Application :** Pour DropdownMenuTrigger → passer `className` directement sur le composant trigger au lieu de `asChild`. Vérifier `components.json` pour savoir si c'est `base` ou `radix`.
+
+---
+
+## LRN-005 — 2026-04-23
+
+**Pattern :** Tailwind v4 = config CSS only
+
+**Contexte :** Ce projet utilise Tailwind v4 avec config dans globals.css (pas de tailwind.config.js). Les tokens personnalisés sont définis dans `@theme inline {}`. Ajouter des styles custom Leadaly (gradient bg, glassmorphism) directement dans globals.css.
+
+**Application :** Ajouter des tokens Leadaly dans globals.css avec `@theme inline {}`. Ne pas chercher tailwind.config.js. Les classes utilitaires personnalisées (.card-leadaly, .btn-leadaly-gradient) vont aussi dans globals.css.
+
+---
+
+## LRN-006 — 2026-04-23
+
+**Pattern :** libsql Row.asdict() pas Row.columns
+
+**Contexte :** Turso libsql-client retourne des `Row` avec méthode `.asdict()`. `.columns` n'existe pas. `execute()` prend les params en liste (pas de mapping named).
+
+**Application :** `row.asdict()` pour convertir les résultats libsql. `await db.execute(sql, [param1, param2])` — params en liste, pas dict.

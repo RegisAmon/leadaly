@@ -1,14 +1,14 @@
-import { redirect } from "next/navigation";
-import { auth } from "@clerk/nextjs/server";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { AppLayout } from "@/components/layout/AppLayout";
 
 export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { userId } = await auth();
-  if (!userId) {
-    redirect("/sign-in");
-  }
-  return <>{children}</>;
+  return (
+    <TooltipProvider>
+      <AppLayout>{children}</AppLayout>
+    </TooltipProvider>
+  );
 }

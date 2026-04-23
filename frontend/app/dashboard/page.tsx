@@ -1,39 +1,105 @@
-import { auth, clerkClient } from "@clerk/nextjs/server";
+"use client";
 
-export default async function DashboardPage() {
-  const { userId } = await auth();
-  if (!userId) {
-    return <div>Non autorisé</div>;
-  }
+import { Users, Search, TrendingUp, Clock } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
-  const { users } = await clerkClient();
-  const user = await users.getUser(userId);
-  const email = user.emailAddresses[0]?.emailAddress;
-  const firstName = user.firstName;
-  const lastName = user.lastName;
-  void lastName; // used for workspace name generation
+const stats = [
+  {
+    label: "Total Prospects",
+    value: "1,247",
+    change: "+12% ce mois",
+    icon: Users,
+    color: "text-blue-500",
+  },
+  {
+    label: "Campagnes",
+    value: "5",
+    change: "2 actives",
+    icon: Search,
+    color: "text-indigo-500",
+  },
+  {
+    label: "Taux d'ouverture",
+    value: "34.2%",
+    change: "+2.1% vs mois dernier",
+    icon: TrendingUp,
+    color: "text-emerald-500",
+  },
+  {
+    label: "En attente",
+    value: "3 jobs",
+    change: "LinkedIn scraping",
+    icon: Clock,
+    color: "text-amber-500",
+  },
+];
 
+export default function DashboardPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-green-50 p-6">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Bienvenue{firstName ? `, ${firstName}` : ""} 👋
-        </h1>
-        <p className="text-gray-600 mb-6">{email}</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-sm">
-            <p className="text-sm text-gray-500 mb-1">Crédits restants</p>
-            <p className="text-3xl font-bold text-blue-600">—</p>
-          </div>
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-sm">
-            <p className="text-sm text-gray-500 mb-1">Campagnes actives</p>
-            <p className="text-3xl font-bold text-purple-600">0</p>
-          </div>
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-sm">
-            <p className="text-sm text-gray-500 mb-1">Leads totaux</p>
-            <p className="text-3xl font-bold text-green-600">0</p>
-          </div>
-        </div>
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h1 className="text-2xl font-semibold">Tableau de bord</h1>
+        <p className="text-sm text-muted-foreground mt-0.5">
+          Bienvenue 👋 — voici l&apos;aperçu de votre activité
+        </p>
+      </div>
+
+      {/* Stats cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {stats.map((stat) => (
+          <Card key={stat.label} className="card-leadaly border-0 shadow-sm">
+            <CardContent className="p-4">
+              <div className="flex items-start justify-between mb-3">
+                <span className="text-xs text-muted-foreground font-medium">
+                  {stat.label}
+                </span>
+                <stat.icon className={`size-4 ${stat.color}`} />
+              </div>
+              <p className="text-2xl font-semibold">{stat.value}</p>
+              <p className="text-xs text-muted-foreground mt-1">{stat.change}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Placeholder sections */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* bySector placeholder */}
+        <Card className="card-leadaly border-0 shadow-sm">
+          <CardContent className="p-4">
+            <h3 className="text-sm font-medium mb-4">Prospects par secteur</h3>
+            <div className="space-y-3">
+              {["Tech", "Finance", "Santé", "Retail", "Industrie"].map(
+                (sector) => (
+                  <div key={sector} className="flex items-center gap-3">
+                    <Skeleton className="h-2 flex-1" />
+                    <Skeleton className="h-3 w-8" />
+                  </div>
+                )
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* recentActivity placeholder */}
+        <Card className="card-leadaly border-0 shadow-sm">
+          <CardContent className="p-4">
+            <h3 className="text-sm font-medium mb-4">Activité récente</h3>
+            <div className="space-y-3">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <Skeleton className="size-8 rounded-full" />
+                  <div className="flex-1 space-y-1">
+                    <Skeleton className="h-3 w-3/4" />
+                    <Skeleton className="h-2 w-1/2" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
