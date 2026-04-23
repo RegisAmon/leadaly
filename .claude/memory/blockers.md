@@ -22,7 +22,7 @@ columns: [id, date, friction, cause, solution, statut]
 - `mkdir -p ~/workspace/leadaly/`
 - Initialiser Next.js frontend avec `create-next-app`
 - Initialiser FastAPI backend avec venv + deps
-- Init git + remote RegisAmon/leadaly
+- Init git + remote RegisAmon/leadaly (repo public créé via `gh`)
 - Installer shadcn/ui
 
 **Statut :** Résolu — SESSION 1.1 terminée
