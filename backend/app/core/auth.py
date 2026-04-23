@@ -50,3 +50,11 @@ class ClerkBearer(HTTPBearer):
 
 
 clerk_bearer = ClerkBearer()
+
+
+async def clerk_auth(request: Request) -> dict:
+    """FastAPI dependency: verify Clerk JWT and return payload."""
+    user = await clerk_bearer(request)
+    if not user:
+        raise HTTPException(401, "Missing Clerk authorization")
+    return user

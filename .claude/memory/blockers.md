@@ -12,7 +12,13 @@ columns: [id, date, friction, cause, solution, statut]
 
 ---
 
+| BLK-002 | 2026-04-23 | libsql-client Row n'a pas `.columns` — API différente de SQLAlchemy | Résolu |
+
 ## BLK-001 — 2026-04-23
+...
+## BLK-002 — 2026-04-23
+
+**Friction :** `libsql_client.Row` n'a pas l'attribut `.columns` comme prévu.，也没有`.keys()` mais `.asdict()` existe.
 
 **Friction :** Projet Leadaly n'existe pas encore. Aucune structure de code, pas de repo git, pas de PostgreSQL provisionné, pas de variables d'environnement configurées.
 

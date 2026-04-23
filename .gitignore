@@ -1,5 +1,8 @@
-# Dependencies
-node_modules/
+# SQLite / Turso local
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
 frontend/node_modules/
 backend/venv/
 
