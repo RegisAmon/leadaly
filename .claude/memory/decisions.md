@@ -25,4 +25,4 @@ columns: [id, date, titre, décision, pourquoi, alternatives, statut]
 - Django : rejeté — async possible mais FastAPI plus léger et mieux adapté aux APIs microservices
 - Supabase BaaS complet (sans backend FastAPI) : rejeté — scraping LinkedIn et jobs Celery ne rentrent pas dans le modèle serverless
 
-**Statut :** Validé — en cours d'implémentation (SESSION 1.1)
+**Statut :** Validé — SESSION 1.2 terminée
