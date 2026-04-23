@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+backend/venv/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+frontend/.next/
+frontend/out/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+backend/**/*.pyc
+backend/__pycache__/
+
+# Alembic
+backend/alembic/versions/*.pyc
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Git
+*.orig
+
+# Vercel
+.vercel
