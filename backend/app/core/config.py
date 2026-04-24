@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     HUNTER_API_KEY: str = ""
     LINKDAPI_KEY: str = ""
     APAFY_TOKEN: str = ""
+    API_BASE_URL: str = "http://localhost:8000"
     RESEND_API_KEY: str = ""
     ANTHROPIC_API_KEY: str = ""
     AWS_ACCESS_KEY_ID: str = ""

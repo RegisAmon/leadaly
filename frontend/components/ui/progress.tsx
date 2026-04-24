@@ -9,10 +9,15 @@ function Progress({
   children,
   value,
   ...props
-}: ProgressPrimitive.Root.Props) {
+}: {
+  className?: string;
+  children?: React.ReactNode;
+  value?: number | null;
+} & Record<string, unknown>) {
+  const numericValue = typeof value === "number" ? value : null;
   return (
     <ProgressPrimitive.Root
-      value={value}
+      value={numericValue}
       data-slot="progress"
       className={cn("flex flex-wrap gap-3", className)}
       {...props}

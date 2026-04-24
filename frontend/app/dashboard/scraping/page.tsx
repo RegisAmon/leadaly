@@ -1,52 +1,125 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { useState } from "react";
+import { RefreshCw, Zap } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { JobList, type ScrapingJob } from "@/components/scraping/JobList";
+import { CreateJobDialog } from "@/components/scraping/CreateJobDialog";
+
+// Mock data — replace with real API when backend is ready
+const MOCK_JOBS: ScrapingJob[] = [
+  {
+    id: "1",
+    status: "completed",
+    api_source: "apify",
+    total_results: 47,
+    new_leads: 31,
+    duplicate_leads: 16,
+    error_message: null,
+    started_at: new Date(Date.now() - 3600000 * 2).toISOString(),
+    completed_at: new Date(Date.now() - 3600000).toISOString(),
+    created_at: new Date(Date.now() - 3600000 * 3).toISOString(),
+  },
+  {
+    id: "2",
+    status: "running",
+    api_source: "apify",
+    total_results: 0,
+    new_leads: 0,
+    duplicate_leads: 0,
+    error_message: null,
+    started_at: new Date(Date.now() - 300000).toISOString(),
+    completed_at: null,
+    created_at: new Date(Date.now() - 400000).toISOString(),
+  },
+];
 
 export default function ScrapingPage() {
+  const [jobs, setJobs] = useState<ScrapingJob[]>(MOCK_JOBS);
+  const [loading] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  function handleCreateJob(payload: {
+    api_source: string;
+    filters: {
+      keywords: string[];
+      location: string;
+      industry: string;
+      seniority: string;
+      max_results: number;
+    };
+  }) {
+    const newJob: ScrapingJob = {
+      id: `job-${Date.now()}`,
+      status: "running",
+      api_source: payload.api_source,
+      total_results: 0,
+      new_leads: 0,
+      duplicate_leads: 0,
+      error_message: null,
+      started_at: new Date().toISOString(),
+      completed_at: null,
+      created_at: new Date().toISOString(),
+    };
+    setJobs((prev) => [newJob, ...prev]);
+    // TODO: call POST /api/jobs with payload.filters
+    console.log("Create job:", payload);
+  }
+
+  function handleCancelJob(jobId: string) {
+    setJobs((prev) =>
+      prev.map((j) =>
+        j.id === jobId ? { ...j, status: "cancelled" as const } : j
+      )
+    );
+    // TODO: call POST /api/jobs/{jobId}/cancel
+    console.log("Cancel job:", jobId);
+  }
+
+  const runningJobs = jobs.filter((j) => j.status === "running" || j.status === "pending");
+
   return (
     <div className="space-y-4">
-      <div>
-        <h1 className="text-xl font-semibold">Scraping LinkedIn</h1>
-        <p className="text-sm text-muted-foreground">
-          Lancez des campagnes de recherche sur LinkedIn Sales Navigator
-        </p>
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-semibold flex items-center gap-2">
+            <RefreshCw className="size-5 text-blue-500" />
+            Scraping LinkedIn
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Lancez des campagnes sur LinkedIn Sales Navigator pour trouver des prospects B2B.
+          </p>
+        </div>
+        <Button
+          size="sm"
+          className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:opacity-90"
+          onClick={() => setDialogOpen(true)}
+        >
+          <Zap className="size-4 mr-1.5" />
+          Nouveau job
+        </Button>
       </div>
 
-      {/* API status */}
-      <Card className="card-leadaly border-0 shadow-sm">
-        <CardContent className="p-4">
-          <h3 className="text-sm font-medium mb-3">État des connexions</h3>
-          <div className="space-y-2">
-            {[
-              { name: "LinkdAPI", status: "non connecté" },
-              { name: "Apify", status: "non connecté" },
-            ].map((api) => (
-              <div
-                key={api.name}
-                className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0"
-              >
-                <span className="text-sm">{api.name}</span>
-                <Skeleton className="h-5 w-24 rounded-full" />
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Empty jobs list */}
-      <Card className="card-leadaly border-0 shadow-sm">
-        <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-          <div className="size-12 rounded-full bg-amber-50 flex items-center justify-center mb-4">
-            <span className="text-2xl">⚡</span>
-          </div>
-          <h3 className="font-medium mb-1">Aucun job en cours</h3>
-          <p className="text-sm text-muted-foreground max-w-xs">
-            Les jobs de scraping apparaîtront ici une fois lancés.
+      {/* Active jobs notice */}
+      {runningJobs.length > 0 && (
+        <div className="rounded-xl bg-blue-50 border border-blue-100 p-3 flex items-center gap-3">
+          <RefreshCw className="size-4 text-blue-500 animate-spin shrink-0" />
+          <p className="text-sm text-blue-700">
+            {runningJobs.length} job{runningJobs.length > 1 ? "s" : ""} en cours d&apos;exécution. Les prospects seront ajoutés automatiquement.
           </p>
-          <Skeleton className="h-9 w-44 rounded-lg mt-4" />
-        </CardContent>
-      </Card>
+        </div>
+      )}
+
+      {/* Jobs list */}
+      <JobList jobs={jobs} loading={loading} onCancel={handleCancelJob} />
+
+      {/* Create job dialog */}
+      <CreateJobDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onCreate={handleCreateJob}
+      />
     </div>
   );
 }
