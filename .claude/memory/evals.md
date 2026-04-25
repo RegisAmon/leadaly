@@ -10,6 +10,7 @@ columns: [id, date, output, méthode, anomalies, action]
 |----|------|--------|--------|
 | EVAL-001 | 2026-04-23 | Système mémoire agent 5 registres | Keep |
 | EVAL-002 | 2026-04-23 | Protocole session closing — workflow rituel | Keep |
+| EVAL-003 | 2026-04-24 | Test local Leadaly — Backend ✅, Clerk bloque /dashboard (clé vide), sign-in/up marchent après config | Keep |
 
 ---
 
@@ -34,3 +35,13 @@ columns: [id, date, output, méthode, anomalies, action]
 **Anomalies :** None.
 
 **Action :** Keep — À appliquer sur TOUTES les sessions.
+
+## EVAL-003 — 2026-04-24
+
+**Output :** Test local Leadaly — Backend FastAPI (port 8000) ✅, Frontend Next.js (port 3000) ✅. Clerk redirige vers sign-in tant que `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` vide. Après config : sign-in "Sign in to Leadaly" ✅, sign-up "Create your account" ✅, Development mode visible.
+
+**Méthode :** Lancement servers en background, curl health checks, browser navigation, browser_snapshot pour extraire le DOM.
+
+**Anomalies :** Clerk bloque /dashboard/* sans session. browser_vision ne parvient pas à analyser les screenshots (les fichiers existent mais le tool ne lit pas les images locales). browser_snapshot textuel fonctionne parfaitement.
+
+**Action :** Keep — le workflow de test local est bon. Pour les screenshots visuels, utiliser une autre méthode (envoyer le fichier par un canal qui supporte les images).
