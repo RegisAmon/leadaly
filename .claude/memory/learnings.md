@@ -14,6 +14,8 @@ columns: [id, date, pattern, contexte, application]
 | LRN-004 | 2026-04-23 | shadcn/base-ui — pas de `asChild`, utiliser `render` prop | Frontend Leadaly |
 | LRN-005 | 2026-04-23 | Tailwind v4 = config CSS only, `@theme inline` dans globals.css | Frontend Leadaly |
 | LRN-006 | 2026-04-23 | libsql Row.asdict() pas Row.columns | Backend Turso |
+| LRN-007 | 2026-04-24 | base-ui onValueChange unions larges — Array.isArray guard pour Slider | Frontend Leadaly |
+| LRN-008 | 2026-04-24 | shadcn/base-ui = pas de asChild/render sur triggers — mini-dropdown inline | Frontend Leadaly |
 
 ---
 
@@ -74,3 +76,19 @@ columns: [id, date, pattern, contexte, application]
 **Contexte :** Turso libsql-client retourne des `Row` avec méthode `.asdict()`. `.columns` n'existe pas. `execute()` prend les params en liste (pas de mapping named).
 
 **Application :** `row.asdict()` pour convertir les résultats libsql. `await db.execute(sql, [param1, param2])` — params en liste, pas dict.
+
+## LRN-007 — 2026-04-24
+
+**Pattern :** base-ui `onValueChange` unions larges
+
+**Contexte :** Slider base-ui passe `number | readonly number[]` même quand `max={1}` et que ce n'est qu'une valeur. Select passe `(string | null, eventDetails)`. Tooltip passe `open: boolean | undefined`.
+
+**Application future :** Toujours typer défensivement les handlers `onValueChange` de base-ui : `Array.isArray()` pour Slider, null guard pour Select, `?? false` pour Tooltip.
+
+## LRN-008 — 2026-04-24
+
+**Pattern :** shadcn/base-ui = pas de `asChild`, pas de `render={<Button/>}` sur les triggers
+
+**Contexte :** DropdownMenuTrigger, DialogTrigger, SheetTrigger de shadcn avec base-ui n'acceptent pas `asChild` ni le pattern `render={<Button />}`. Le composant passe directement les props au primitive.
+
+**Application future :** Pour les menus contextuels : utiliser un mini-dropdown inline avec `useState` + `useRef` + `useEffect` (cf. CampaignCard MiniDropdown). Pour les Dialog/Sheet : le trigger est un bouton standard, pas besoin de `asChild`.

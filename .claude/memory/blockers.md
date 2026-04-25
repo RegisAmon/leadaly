@@ -13,6 +13,8 @@ columns: [id, date, friction, cause, solution, statut]
 ---
 
 | BLK-002 | 2026-04-23 | libsql-client Row n'a pas `.columns` — API différente de SQLAlchemy | Résolu |
+| BLK-003 | 2026-04-24 | Slider onValueChange type error — number | readonly number[] | Résolu |
+| BLK-004 | 2026-04-24 | Progress value={undefined} incompatible avec number | null | Résolu |
 
 ## BLK-001 — 2026-04-23
 ...
@@ -32,3 +34,23 @@ columns: [id, date, friction, cause, solution, statut]
 - Installer shadcn/ui
 
 **Statut :** Résolu — SESSION 1.1 terminée
+
+## BLK-003 — 2026-04-24
+
+**Friction :** `Type error: Type 'number | readonly number[]' must have a '[Symbol.iterator]()'` dans CreateJobDialog Slider
+
+**Cause réelle :** TypeScript ne peut pas déduire que `([v])` sur `number | readonly number[]` est safe. Le cast `(val as [number])` ne suffit pas.
+
+**Solution :** `onValueChange={(val) => setMaxResults(Number(Array.isArray(val) ? val[0] : val))}`
+
+**Statut :** Résolu
+
+## BLK-004 — 2026-04-24
+
+**Friction :** `Type error: Type 'number | undefined' is not assignable to type 'number | null'` dans JobList Progress
+
+**Cause réelle :** `ProgressPrimitive.Root` exige `value?: number | null`. `undefined` n'est pas assignable. Le `Progress` shadcn passait `value ?? undefined` ce qui donne `undefined`.
+
+**Solution :** Wrapper défensif : `const numericValue = typeof value === 'number' ? value : null;` puis `value={numericValue}` dans `ProgressPrimitive.Root`
+
+**Statut :** Résolu

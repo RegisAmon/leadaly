@@ -10,6 +10,7 @@ columns: [id, date, titre, décision, pourquoi, alternatives, statut]
 |----|------|-------|--------|
 | BDR-001 | 2026-04-23 | Stack Leadaly — Next.js 14 + FastAPI + Turso (libSQL) + Redis | Ouvert |
 | BDR-002 | 2026-04-23 | Turso取代Supabase comme DB provider | Validé |
+| BDR-003 | 2026-04-24 | Pattern Slider + Progress base-ui dans shadcn | Ouvert |
 
 ---
 
@@ -45,3 +46,17 @@ columns: [id, date, titre, décision, pourquoi, alternatives, statut]
 - Fallback local: `file:local.db`
 
 **Statut :** Validé — SESSION 1.3 (DB schema)
+
+## BDR-003 — 2026-04-24
+
+**Titre :** Pattern Slider + Progress base-ui dans shadcn Leadaly
+
+**Décision :** Les composants shadcn `Slider` et `Progress` wrappent des primitives base-ui. Le `Slider` passe `number | readonly number[]` à `onValueChange` (même pour un seul value). Toujours utiliser `Array.isArray(val) ? val[0] : val`. Pour `Progress`, le wrapper doit convertir `undefined`/`null` en `number | null` avant de passer à `ProgressPrimitive.Root` : `typeof value === 'number' ? value : null`.
+
+**Pourquoi :** TypeScript strict mode dans Next.js 15 refuse les types incompatibles. base-ui utilise des unions plus larges que shadcn.
+
+**Alternatives considérées :**
+- `@ts-ignore` : refusé — pollue le typage
+- Caster en `any` : refusé — perd la sécurité
+
+**Statut :** Ouvert
