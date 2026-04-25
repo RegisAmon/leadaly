@@ -14,7 +14,8 @@ columns: [date, durée, thèmes, statut_session]
 | 2026-04-24 | ~25min | SESSION 2.2 : Jobs router, Apify webhook, JobList + CreateJobDialog | ✅ |
 | 2026-04-24 | ~15min | SESSION 2.3 : Campaigns UI (CampaignCard, CreateCampaignDialog) | ✅ |
 | 2026-04-24 | ~30min | SESSION 2.4/3.x/4.x : Enrichment Hunter, Email AI Claude, Stripe billing, Settings, Dashboard charts | ✅ |
-| 2026-04-24 (soir) | ~20min | Session closing + memory update: BDR-003, LRN-007/LRN-008, BLK-003/BLK-004. Build ✅, 7 commits pushés. | ✅ |
+| 2026-04-24 (soir) | ~20min | Session closing + memory update: BDR-003, LRN-007/LRN-008, BLK-003/BLK-004. Build ✅, 7 commits pushés. |
+| 2026-04-24 (test) | ~15min | Test local — Backend ✅, Frontend ✅, Clerk configuré (pk+sk), sign-in/up Leadaly ✅. EVAL-003. Push final 9539f0b. Prochaine : créer compte Clerk + test dashboard. | ✅ |
 
 ---
 
